@@ -24,8 +24,21 @@ from pydantic import BaseModel, ConfigDict, Field
 # --------------------------------------------------------------------------
 
 
+import os
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "machine_downtime_pipeline.pkl")
+
+_model = None
+_load_error = None
+
+try:
+  with open(MODEL_PATH, "rb") as f:
+    _model = pickle.load(f)
+except Exception as exc:
+  _load_error = str(exc)
+  print(f"FAILED TO LOAD MODEL FROM {MODEL_PATH}: {exc}")
+
 
 
 # The exact order/names the pipeline was fitted on.
