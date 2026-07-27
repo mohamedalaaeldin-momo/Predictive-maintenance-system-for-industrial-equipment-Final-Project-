@@ -9,10 +9,10 @@ Entry point used by Vercel's Python runtime (must expose a module-level
 """
 
 import os
-import pickle
 from pathlib import Path
 from typing import Literal
 
+import joblib
 import numpy as np
 import pandas as pd
 from fastapi import FastAPI, HTTPException
@@ -55,8 +55,7 @@ _model = None
 _load_error = None
 
 try:
-    with open(MODEL_PATH, "rb") as f:
-        _model = pickle.load(f)
+    _model = joblib.load(MODEL_PATH)
 except Exception as exc:  # noqa: BLE001 - we want to surface any load issue
     _load_error = f"{type(exc).__name__}: {exc}"
 
