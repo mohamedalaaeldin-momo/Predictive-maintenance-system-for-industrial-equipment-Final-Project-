@@ -23,8 +23,11 @@ from pydantic import BaseModel, ConfigDict, Field
 # Model loading (runs once per cold start, not per-request)
 # --------------------------------------------------------------------------
 
-MODEL_PATH =( Path(__file__).resolve().parent / "machine_downtime_pipeline.pkl"
-            )
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "machine_downtime_pipeline.pkl")
+
+
 # The exact order/names the pipeline was fitted on.
 FEATURE_COLUMNS = [
     "Torque(Nm)",
