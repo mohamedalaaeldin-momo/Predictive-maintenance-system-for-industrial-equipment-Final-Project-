@@ -21,24 +21,31 @@ FEATURE_COLUMNS = [
 FAILURE_CLASS = 1
 MANUAL_REVIEW_THRESHOLD = 0.60
 
-# إنشاء موديل جاهز وشغال فوراً في الذاكرة لمنع مشاكل الرفع والمسارات مع Vercel
 _model = None
 _load_error = None
 
 try:
-  # بناء Pipeline جاهز للعمل برمجياً لضمان عدم فشل التحميل بنسبة 100%
-  # (حتى لو مفيش ملف pkl مرفوع بشكل صحيح)
-  np.random.seed(42)
-  X_dummy = np.random.rand(100, len(FEATURE_COLUMNS))
-  y_dummy = np.random.randint(0, 2, size=100)
+  # قراءة الداتا ست الحقيقية مباشرة من مجلد المشروع
+  BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+  csv_path = os.path.join(BASE_DIR, "dataset.csv")
+
+  df = pd.read_csv(csv_path)
+
+  # تأكد إن اسم عمود الـ Target عندك في ملف الـ csv هو "Failure" أو غيره حسب ملفك
+  # لو اسم العمود مختلف عندك قولي عليه
+  target_column = "Failure" if "Failure" in df.columns else df.columns[-1]
+
+  X = df[FEATURE_COLUMNS]
+  y = df[target_column]
 
   _model = Pipeline([
       ("scaler", StandardScaler()),
       ("clf", RandomForestClassifier(random_state=42)),
   ])
-  _model.fit(X_dummy, y_dummy)
+  _model.fit(X, y)
 except Exception as exc:
   _load_error = str(exc)
+  print(f"Error loading dataset or training: {exc}")
 
 
 class SensorReading(BaseModel):
