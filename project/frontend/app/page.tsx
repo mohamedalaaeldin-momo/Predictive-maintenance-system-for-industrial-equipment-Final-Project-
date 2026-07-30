@@ -212,19 +212,7 @@ function OutputGauge({ result, loading }: { result: PredictResult | null; loadin
           strokeDasharray={`${probability * 314} 314`}
           opacity={0.9}
         />
-        <line
-          className="needle"
-          x1="110"
-          y1="110"
-          x2="110"
-          y2="24"
-          stroke="#E8EAED"
-          strokeWidth="3"
-          strokeLinecap="round"
-          transform={`rotate(${angle} 110 110)`}
-        />
-        <circle cx="110" cy="110" r="6" fill="#E8EAED" />
-      </svg>
+              </svg>
 
       <div className="-mt-2 text-center">
         <p className="font-mono text-3xl font-semibold" style={{ color: result ? zoneColor : "#5B6270" }}>
